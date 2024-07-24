@@ -3,27 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Form Validation Example</title>
+    <style>
+        .valid {
+            border-color: green;
+        }
+        .invalid {
+            border-color: red;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-  <form action="signup.html" method="post" id="signup">
-    <h1>Sign Up</h1>
-    <div class="field">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" placeholder="Enter your fullname" />
-      <small></small>
-    </div>
-    <div class="field">
-      <label for="email">Email:</label>
-      <input type="text" id="email" name="email" placeholder="Enter your email address" />
-      <small></small>
-    </div>
-    <button type="submit">Subscribe</button>
-  </form>
-  
-  
+    <form id="myForm" action="#" method="POST" novalidate>
+        <label for="username">User name (5-20 characters):</label>
+        <input type="text" id="username" name="username" required minlength="5" maxlength="20">
+        <span class="error-message" id="username-error"></span>
+        <br><br>
+        
+        <label for="email">Email address:</label>
+        <input type="email" id="email" name="email" required>
+        <span class="error-message" id="email-error"></span>
+        <br><br>
+        
+        <label for="phone">Phone number (max 15 characters):</label>
+        <input type="tel" id="phone" name="phone" required maxlength="15">
+        <span class="error-message" id="phone-error"></span>
+        <br><br>
+        
+        <label for="comment">Comment (max 200 characters):</label>
+        <textarea id="comment" name="comment" required maxlength="200"></textarea>
+        <span class="error-message" id="comment-error"></span>
+        <br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
 
-      <script src="app.js"></script>
+    <script>
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            const username = document.getElementById('username');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const comment = document.getElementById('comment');
+
+            let valid = true;
+
+            if (!username.checkValidity()) {
+                document.getElementById('username-error').textContent = "Username must be between 5 and 20 characters.";
+                valid = false;
+            } else {
+                document.getElementById('username-error').textContent = "";
+            }
+
+            if (!email.checkValidity()) {
+                document.getElementById('email-error').textContent = "Please enter a valid email address.";
+                valid = false;
+            } else {
+                document.getElementById('email-error').textContent = "";
+            }
+
+            if (!phone.checkValidity()) {
+                document.getElementById('phone-error').textContent = "Phone number must be a maximum of 15 characters.";
+                valid = false;
+            } else {
+                document.getElementById('phone-error').textContent = "";
+            }
+
+            if (!comment.checkValidity()) {
+                document.getElementById('comment-error').textContent = "Comment must be a maximum of 200 characters.";
+                valid = false;
+            } else {
+                document.getElementById('comment-error').textContent = "";
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                } else {
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
